@@ -33,7 +33,7 @@ class DishesRepository @Inject constructor(
             .map { it.toDishItem() }
     }
 
-    override suspend fun isEmptyDishes(): Boolean = true
+    override suspend fun isEmptyDishes(): Boolean = dishesDao.dishesCounts() == 0
 
     override suspend fun syncDishes() {
         val dishes = mutableListOf<DishRes>()
@@ -52,12 +52,10 @@ class DishesRepository @Inject constructor(
         dishesDao.findAllDishes().map { it.toDishItem() }
 
     override suspend fun findSuggestions(query: String): Map<String, Int> {
-        return mapOf(
-            "test" to 4,
-            "test2" to 2,
-            "test3" to 1,
-        )
-//        TODO("Not yet implemented")
+        val q = query.replace("[^\\p{L}0-9]".toRegex(), "").lowercase()
+        return dishesDao.findDishesFrom(q).flatMap {
+            "\\p{L}*$q\\p{L}*".toRegex().findAll(it.name.lowercase(), 0)
+        }.groupingBy { it.value }.eachCount()
     }
 
     override suspend fun addDishToCart(id: String) {
