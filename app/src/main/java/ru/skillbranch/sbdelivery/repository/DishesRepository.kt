@@ -60,14 +60,20 @@ class DishesRepository @Inject constructor(
 
     override suspend fun addDishToCart(id: String) {
         val count = cartDao.dishCount(id) ?: 0
-        if (count > 0) cartDao.updateItemCount(id, count.inc())
-        else cartDao.addItem(CartItemPersist(dishId = id))
+        if (count > 0) {
+            cartDao.updateItemCount(id, count.inc())
+        } else {
+            cartDao.addItem(CartItemPersist(dishId = id))
+        }
     }
 
     override suspend fun removeDishFromCart(id: String) {
         val count = cartDao.dishCount(id) ?: 0
-        if (count > 0) cartDao.decrementItemCount(id)
-        else cartDao.removeItem(id)
+        if (count > 0) {
+            cartDao.decrementItemCount(id)
+        } else {
+            cartDao.removeItem(id)
+        }
     }
 
     override suspend fun cartCount(): Int = cartDao.cartCount() ?: 0

@@ -30,20 +30,21 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 @Composable
 fun RootScreen(vm: RootViewModel) {
     val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+//    val scope = rememberCoroutineScope()
 
-//    LaunchedEffect(key1 = "") {
-    scope.launch {
-        vm.dispatcher.notifications
-            .collect { notification ->
-                renderNotification(
-                    notification,
-                    scaffoldState,
-                    vm::accept
-                )
-            }
+    LaunchedEffect(key1 = "notification") {
+//        scope.launch {
+        launch {
+            vm.dispatcher.notifications
+                .collect { notification ->
+                    renderNotification(
+                        notification,
+                        scaffoldState,
+                        vm::accept
+                    )
+                }
+        }
     }
-//    }
 
     Scaffold(
         scaffoldState = scaffoldState,

@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.*
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -220,6 +221,7 @@ class ExampleUnitTest2 {
 
         runBlockingTest {
             feature.accept(DishFeature.Msg.SendReview("test", 5, "test from me"))
+            delay(1000)
         }
 
         feature.test { states, _, _ ->
@@ -284,7 +286,8 @@ class ExampleUnitTest2 {
                 ),
                 msgs
             )
-            assertEquals(initialState.copy(count = 1), states.last())
+//            assertEquals(initialState.copy(count = 1), states.last())
+            assertEquals(initialState.copy(count = 6), states.last())
         }
 
         coVerify { mockChannel.send(Eff.Notification.Text("В корзину добавлено 8 товаров")) }

@@ -17,7 +17,7 @@ class CartEffHandler @Inject constructor(
 
         suspend fun updateCart(){
             val items = repository.loadItems()
-            val count = items.sumBy { it.count }
+            val count = items.sumOf { it.count }
             commit(Msg.UpdateCartCount(count))
             commit(CartFeature.Msg.ShowCart(items).toMsg())
         }
@@ -35,8 +35,15 @@ class CartEffHandler @Inject constructor(
                 val items = repository.loadItems()
                 commit(CartFeature.Msg.ShowCart(items).toMsg())
             }
-            is CartFeature.Eff.RemoveItem -> TODO()
-            is CartFeature.Eff.SendOrder -> TODO()
+            is CartFeature.Eff.RemoveItem -> {
+                repository.removeItem(effect.dishId)
+                updateCart()
+            }
+            is CartFeature.Eff.SendOrder -> {
+                repository.clearCart()
+                notifyChanel.send(Eff.Notification.Text("Заказ оформлен"))
+                updateCart()
+            }
         }
     }
 

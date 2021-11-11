@@ -14,18 +14,20 @@ import kotlin.coroutines.coroutineContext
 class DishEffHandler @Inject constructor(
     private val repository: DishRepository,
     private val notifyChannel: Channel<Eff.Notification>,
-    private val dispatcher: CoroutineDispatcher  = Dispatchers.Default
-) :
-    IEffHandler<DishFeature.Eff, Msg> {
-
-    private var localJob: Job? = null
+//    private val dispatcher: CoroutineDispatcher = Dispatchers.Default
+) : IEffHandler<DishFeature.Eff, Msg> {
 
     override suspend fun handle(effect: DishFeature.Eff, commit: (Msg) -> Unit) {
 
-        if (localJob == null) localJob = Job()
-        withContext(localJob!! + dispatcher) {
+//        if (localJob == null) localJob = Job()
+//        withContext(localJob!! + dispatcher) {
             when (effect) {
-                is DishFeature.Eff.AddToCart -> TODO()
+                is DishFeature.Eff.AddToCart -> {
+                    repository.addToCart(effect.id, effect.count)
+                    val count = repository.cartCount()
+                    commit(Msg.UpdateCartCount(count))
+                    notifyChannel.send(Eff.Notification.Error("В корзину добавлено $count товаров"))
+                }
                 is DishFeature.Eff.LoadDish -> {
                     val dish = repository.findDish(effect.dishId)
                     commit(DishFeature.Msg.ShowDish(dish).toMsg())
@@ -38,16 +40,26 @@ class DishEffHandler @Inject constructor(
                         notifyChannel.send(Eff.Notification.Error(t.message ?: "something error"))
                     }
                 }
-                is DishFeature.Eff.SendReview -> TODO()
-                is DishFeature.Eff.Terminate -> {
-                    localJob?.cancel("Terminate coroutine scope")
-                    localJob = null
+                is DishFeature.Eff.SendReview -> {
+                    try {
+                        repository.sendReview(effect.id, effect.rating, effect.review)
+                        notifyChannel.send(Eff.Notification.Text("Отзыв успешно отправлен"))
+                    } catch (t: Throwable) {
+                        notifyChannel.send(Eff.Notification.Error(t.message ?: "something error"))
+                    }
                 }
-            }
+//                is DishFeature.Eff.Terminate -> {
+//                    localJob?.cancel("Terminate coroutine scope")
+//                    localJob = null
+//                }
+//            }
         }
 
     }
 
+//    companion object  {
+//        private var localJob: Job? = null
+//    }
     private fun DishFeature.Msg.toMsg(): Msg = Msg.Dish(this)
 
 }

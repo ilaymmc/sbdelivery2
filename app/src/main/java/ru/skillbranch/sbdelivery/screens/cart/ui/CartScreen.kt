@@ -20,6 +20,32 @@ import ru.skillbranch.sbdelivery.screens.cart.data.ConfirmDialogState
 fun CartScreen(state: CartFeature.State, accept: (CartFeature.Msg) -> Unit) {
     when (state.list) {
         is CartUiState.Value -> {
+            if (state.confirmDialog is ConfirmDialogState.Show) {
+                AlertDialog(
+                    onDismissRequest = {  accept(CartFeature.Msg.HideConfirm)  },
+                    backgroundColor = Color.White,
+                    contentColor = MaterialTheme.colors.primary,
+                    title = { Text(text = "Вы уверены?") },
+                    text = { Text(text = "Вы точно хотите удалить ${state.confirmDialog.title} из корзины") },
+                    buttons = {
+                        Row {
+                            TextButton(
+                                onClick = { accept(CartFeature.Msg.HideConfirm)  },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text("Нет", color = MaterialTheme.colors.secondary)
+                            }
+                            TextButton(
+                                onClick = {
+                                    accept(CartFeature.Msg.RemoveFromCart(state.confirmDialog.id))},
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text("Да", color = MaterialTheme.colors.secondary)
+                            }
+                        }
+                    }
+                )
+            }
             Column() {
                 LazyColumn(
                     contentPadding = PaddingValues(0.dp),
@@ -31,7 +57,8 @@ fun CartScreen(state: CartFeature.State, accept: (CartFeature.Msg) -> Unit) {
                                 onProductClick = { dishId: String, title: String -> accept(CartFeature.Msg.ClickOnDish(dishId, title))},
                                 onIncrement = { dishId -> accept(CartFeature.Msg.IncrementCount(dishId))},
                                 onDecrement = { dishId -> accept(CartFeature.Msg.DecrementCount(dishId))},
-                                onRemove = { dishId, title ->/*TODO*/ }
+                                onRemove = { dishId, title ->
+                                    accept(CartFeature.Msg.ShowConfirm(dishId, title)) }
                             )
                         }
 
@@ -61,7 +88,9 @@ fun CartScreen(state: CartFeature.State, accept: (CartFeature.Msg) -> Unit) {
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { accept(CartFeature.Msg.SendOrder(
+                            state.list.dishes.map { it.id to it.count } .toMap()
+                        )) },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = MaterialTheme.colors.secondary,
                             contentColor = MaterialTheme.colors.onSecondary
@@ -74,7 +103,6 @@ fun CartScreen(state: CartFeature.State, accept: (CartFeature.Msg) -> Unit) {
                     }
                 }
             }
-
         }
         is CartUiState.Empty -> Box(
             contentAlignment = Alignment.Center,
@@ -91,30 +119,4 @@ fun CartScreen(state: CartFeature.State, accept: (CartFeature.Msg) -> Unit) {
         }
     }
 
-    if (state.confirmDialog is ConfirmDialogState.Show) {
-        AlertDialog(
-            onDismissRequest = {  /*TODO*/  },
-            backgroundColor = Color.White,
-            contentColor = MaterialTheme.colors.primary,
-            title = { Text(text = "Вы уверены?") },
-            text = { Text(text = "Вы точно хотите удалить ${state.confirmDialog.title} из корзины") },
-            buttons = {
-                Row {
-                    TextButton(
-                        onClick = { /*TODO*/  },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Нет", color = MaterialTheme.colors.secondary)
-                    }
-                    TextButton(
-                        onClick = { /*TODO*/  },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Да", color = MaterialTheme.colors.secondary)
-                    }
-                }
-
-            }
-        )
-    }
 }
