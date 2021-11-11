@@ -8,11 +8,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import ru.skillbranch.sbdelivery.screens.demo.ui.DemoScreen
 import ru.skillbranch.sbdelivery.screens.root.logic.Command
 import ru.skillbranch.sbdelivery.screens.root.logic.NavigateCommand
 import ru.skillbranch.sbdelivery.screens.root.ui.AppTheme
@@ -21,7 +17,6 @@ import ru.skillbranch.sbdelivery.screens.root.ui.RootScreen
 @AndroidEntryPoint
 class RootActivity : AppCompatActivity() {
     private val vm : RootViewModel by viewModels()
-//    private val vm : DemoViewModel by viewModels()
 
     @ExperimentalFoundationApi
     @ExperimentalComposeUiApi
