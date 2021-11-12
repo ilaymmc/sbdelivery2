@@ -15,6 +15,13 @@ fun DishFeature.State.selfReduce(msg: DishFeature.Msg) : Pair<DishFeature.State,
         is DishFeature.Msg.DecrementCount -> copy(count = max(count - 1,1)) to emptySet()
         is DishFeature.Msg.HideReviewDialog -> copy(isReviewDialog = false) to emptySet()
         is DishFeature.Msg.IncrementCount -> copy(count = count + 1) to emptySet()
+        is DishFeature.Msg.AddReview -> {
+            copy(
+                isReviewDialog = false,
+                reviews = ReviewUiState.Value(
+                    list = (this.reviews as ReviewUiState.ValueWithLoading).list + msg.review )
+            ) to emptySet()
+        }
         is DishFeature.Msg.SendReview -> {
             copy(
                 isReviewDialog = false,

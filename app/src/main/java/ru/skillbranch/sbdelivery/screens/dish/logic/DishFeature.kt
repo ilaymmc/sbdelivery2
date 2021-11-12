@@ -41,5 +41,6 @@ object DishFeature {
         data class ShowDish(val dish: DishContent) : Msg()
         data class AddToCart(val id: String, val count: Int) : Msg()
         data class ShowReviews(val reviews: List<ReviewRes>) : Msg()
+        data class AddReview(val review: ReviewRes) : Msg()
     }
 }
