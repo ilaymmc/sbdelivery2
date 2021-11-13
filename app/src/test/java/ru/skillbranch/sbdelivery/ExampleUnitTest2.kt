@@ -252,6 +252,8 @@ class ExampleUnitTest2 {
             count = 8
         )
 
+        coEvery { mockChannel.send(any()) } coAnswers {}
+
         coEvery { cartDao.dishCount("test") } returns 0
         coEvery { cartDao.addItem(any()) } coAnswers {}
         var callCount = -1
@@ -275,7 +277,7 @@ class ExampleUnitTest2 {
             feature.accept(DishFeature.Msg.AddToCart("test", 6))
         }
 
-        feature.test { states, msgs, _ ->
+        feature.test(timeout = 3000) { states, msgs, _ ->
             assertEquals(
                 listOf(
                     Msg.Dish(DishFeature.Msg.AddToCart("test", 8)),
