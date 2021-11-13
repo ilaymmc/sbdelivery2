@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import ru.skillbranch.sbdelivery.screens.cart.ui.CartScreen
 import ru.skillbranch.sbdelivery.screens.components.DefaultToolbar
 import ru.skillbranch.sbdelivery.screens.components.DishesToolbar
+import ru.skillbranch.sbdelivery.screens.components.NavigationDrawer
 import ru.skillbranch.sbdelivery.screens.dish.ui.DishScreen
 import ru.skillbranch.sbdelivery.screens.dishes.ui.DishesScreen
 import ru.skillbranch.sbdelivery.screens.favorites.ui.FavoriteScreen
@@ -53,7 +54,17 @@ fun RootScreen(vm: RootViewModel) {
         },
         content = { ContentHost(vm) },
         drawerContent = {
-
+            val state = vm.state.collectAsState().value
+            NavigationDrawer(
+                currentRoute = state.currentRoute,
+                cartCount = state.cartCount,
+                notificationCount = state.notificationsCount,
+//                user = state.user
+            ) { route ->
+                if (state.currentRoute == route) return@NavigationDrawer
+                vm.navigate(NavCmd.To(route))
+                scope.launch { scaffoldState.drawerState.close() }
+            }
         },
         drawerScrimColor = MaterialTheme.colors.primaryVariant.copy(alpha = DrawerDefaults.ScrimOpacity),
         snackbarHost = { host ->
