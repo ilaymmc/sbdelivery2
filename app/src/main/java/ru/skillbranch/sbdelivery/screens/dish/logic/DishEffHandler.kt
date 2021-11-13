@@ -1,6 +1,7 @@
 package ru.skillbranch.sbdelivery.screens.dish.logic
 
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import ru.skillbranch.sbdelivery.repository.DishRepository
@@ -25,7 +26,11 @@ class DishEffHandler @Inject constructor(
                     repository.addToCart(effect.id, effect.count)
                     val count = repository.cartCount()
                     commit(Msg.UpdateCartCount(count))
-                    notifyChannel.send(Eff.Notification.Text("В корзину добавлено $count товаров"))
+                    CoroutineScope(Dispatchers.IO).launch {
+                        notifyChannel.send(
+                            Eff.Notification.Text("В корзину добавлено $count товаров")
+                        )
+                    }
                 }
 
                 is DishFeature.Eff.LoadDish -> {
@@ -47,7 +52,7 @@ class DishEffHandler @Inject constructor(
                         val reviews = repository.loadReviews(effect.id)
                         val review = repository.sendReview(effect.id, effect.rating, effect.review)
                         commit(DishFeature.Msg.ShowReviews(reviews + review).toMsg())
-                        //notifyChannel.send(Eff.Notification.Text("Отзыв успешно отправлен"))
+                        notifyChannel.send(Eff.Notification.Text("Отзыв успешно отправлен"))
                     } catch (t: Throwable) {
                         notifyChannel.send(Eff.Notification.Error(t.message ?: "something error"))
                     }
