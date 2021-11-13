@@ -24,8 +24,8 @@ class DishEffHandler @Inject constructor(
                 is DishFeature.Eff.AddToCart -> {
                     repository.addToCart(effect.id, effect.count)
                     val count = repository.cartCount()
-                    notifyChannel.trySend(Eff.Notification.Text("В корзину добавлено $count товаров"))
                     commit(Msg.UpdateCartCount(count))
+                    notifyChannel.send(Eff.Notification.Text("В корзину добавлено $count товаров"))
                 }
 
                 is DishFeature.Eff.LoadDish -> {
