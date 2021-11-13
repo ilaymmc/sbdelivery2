@@ -18,20 +18,21 @@ class DishEffHandler @Inject constructor(
 ) : IEffectHandler<DishFeature.Eff, Msg> {
 
     override suspend fun handle(effect: DishFeature.Eff, commit: (Msg) -> Unit) {
-
 //        if (localJob == null) localJob = Job()
 //        withContext(localJob!! + dispatcher) {
             when (effect) {
                 is DishFeature.Eff.AddToCart -> {
                     repository.addToCart(effect.id, effect.count)
                     val count = repository.cartCount()
+                    notifyChannel.trySend(Eff.Notification.Text("В корзину добавлено $count товаров"))
                     commit(Msg.UpdateCartCount(count))
-                    notifyChannel.send(Eff.Notification.Text("В корзину добавлено $count товаров"))
                 }
+
                 is DishFeature.Eff.LoadDish -> {
                     val dish = repository.findDish(effect.dishId)
                     commit(DishFeature.Msg.ShowDish(dish).toMsg())
                 }
+
                 is DishFeature.Eff.LoadReviews -> {
                     try {
                         val reviews = repository.loadReviews(effect.dishId)
@@ -40,19 +41,22 @@ class DishEffHandler @Inject constructor(
                         notifyChannel.send(Eff.Notification.Error(t.message ?: "something error"))
                     }
                 }
+
                 is DishFeature.Eff.SendReview -> {
                     try {
+                        val reviews = repository.loadReviews(effect.id)
                         val review = repository.sendReview(effect.id, effect.rating, effect.review)
-                        commit(DishFeature.Msg.AddReview(review).toMsg())
+                        commit(DishFeature.Msg.ShowReviews(reviews + review).toMsg())
                         //notifyChannel.send(Eff.Notification.Text("Отзыв успешно отправлен"))
                     } catch (t: Throwable) {
                         notifyChannel.send(Eff.Notification.Error(t.message ?: "something error"))
                     }
                 }
-//                is DishFeature.Eff.Terminate -> {
-//                    localJob?.cancel("Terminate coroutine scope")
-//                    localJob = null
-//                }
+
+                is DishFeature.Eff.Terminate -> {
+                    //                    localJob?.cancel("Terminate coroutine scope")
+                    //                    localJob = null
+                }
 //            }
         }
 
