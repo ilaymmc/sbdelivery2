@@ -6,7 +6,9 @@ import java.io.Serializable
 data class ReviewRes(
     @Json(name = "author")
     val name: String,
-    val date:Long,
-    val rating:Int,
+    @Json(name = "createdAt")
+    val date: Long,
+    val rating: Int,
     @Json(name = "text")
-    val message:String): Serializable
+    val message: String
+) : Serializable
