@@ -52,7 +52,9 @@ class DishEffHandler @Inject constructor(
                         val reviews = repository.loadReviews(effect.id)
                         val review = repository.sendReview(effect.id, effect.rating, effect.review)
                         commit(DishFeature.Msg.ShowReviews(reviews + review).toMsg())
-                        notifyChannel.send(Eff.Notification.Text("Отзыв успешно отправлен"))
+                        CoroutineScope(Dispatchers.IO).launch {
+                            notifyChannel.send(Eff.Notification.Text("Отзыв успешно отправлен"))
+                        }
                     } catch (t: Throwable) {
                         notifyChannel.send(Eff.Notification.Error(t.message ?: "something error"))
                     }
