@@ -41,7 +41,7 @@ data class MenuItem(@DrawableRes val icon: Int, val title: String, val route: St
 val menuItems = listOf(
     MenuItem(R.drawable.ic_home, "Главная", HomeFeature.route),
     MenuItem(R.drawable.ic_menu, "Меню", MenuFeature.route),
-    MenuItem(R.drawable.ic_favorite, "Избранное", FavoriteFeature.route),
+    MenuItem(R.drawable.ic_favorite, "Избраное", FavoriteFeature.route),
     MenuItem(R.drawable.ic_baseline_shopping_cart_24, "Корзина", CartFeature.route),
     MenuItem(R.drawable.ic_user, "Профиль", "profile"),
     MenuItem(R.drawable.ic_orders, "Заказы", "order"),
@@ -87,7 +87,7 @@ fun NavigationDrawer(
                     Icon(
                         tint = MaterialTheme.colors.background,
                         painter = painterResource(id = R.drawable.ic_baseline_exit_to_app_24),
-                        contentDescription = "exit"
+                        contentDescription = "Logout"
                     )
                 }
             }
@@ -147,13 +147,13 @@ fun NavigationDrawer(
             modifier = Modifier
                 .height(44.dp)
                 .fillMaxWidth()
-                .clickable { }
+                .clickable { onSelect("about") }
         ) {
             Spacer(modifier = Modifier.width(20.dp))
             Icon(
                 tint = MaterialTheme.colors.secondary,
                 painter = painterResource(id = R.drawable.ic_about),
-                contentDescription = "О Приложении",
+                contentDescription = "О приложении",
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(30.dp))

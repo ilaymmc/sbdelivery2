@@ -16,6 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.skillbranch.sbdelivery.screens.cart.ui.CartScreen
+import ru.skillbranch.sbdelivery.screens.components.AboutDialog
 import ru.skillbranch.sbdelivery.screens.components.DefaultToolbar
 import ru.skillbranch.sbdelivery.screens.components.DishesToolbar
 import ru.skillbranch.sbdelivery.screens.components.NavigationDrawer
@@ -48,8 +49,10 @@ fun RootScreen(vm: RootViewModel) {
         topBar = {
             AppbarHost(vm, onToggleDrawer =  {
                 val drawerState = scaffoldState.drawerState
-                if (drawerState.isOpen) scope.launch { drawerState.close() }
-                else scope.launch { drawerState.open() }
+                scope.launch {
+                    if (drawerState.isOpen) drawerState.close()
+                    else drawerState.open()
+                }
             })
         },
         content = { ContentHost(vm) },
@@ -59,10 +62,14 @@ fun RootScreen(vm: RootViewModel) {
                 currentRoute = state.currentRoute,
                 cartCount = state.cartCount,
                 notificationCount = state.notificationsCount,
-//                user = state.user
+                user = state.user
             ) { route ->
                 if (state.currentRoute == route) return@NavigationDrawer
-                vm.navigate(NavCmd.To(route))
+                if ("about" == route) {
+                    vm.accept(Msg.ShowAbout(true))
+                } else {
+                    vm.navigate(NavCmd.To(route))
+                }
                 scope.launch { scaffoldState.drawerState.close() }
             }
         },
@@ -185,6 +192,9 @@ fun ContentHost(vm: RootViewModel) {
             )
         }
     }
+    if (state.showAbout) {
+        AboutDialog { vm.accept(Msg.ShowAbout(false)) }
+    }
 }
 
 
@@ -199,16 +209,20 @@ fun AppbarHost(vm: RootViewModel, onToggleDrawer: () -> Unit) {
             title=screen.title,
             state = screen.state,
             cartCount = state.cartCount,
+            canBack = true,
             accept = { vm.accept(Msg.Dishes(it)) },
-            onCart = { vm.navigate(NavCmd.ToCart) }
+            onCart = { vm.navigate(NavCmd.ToCart) },
+            onDrawer = onToggleDrawer
         )
 
         is ScreenState.Favorites -> DishesToolbar(
             title=screen.title,
             state = screen.state,
             cartCount = state.cartCount,
+            canBack = false,
             accept = { vm.accept(Msg.Dishes(it)) },
-            onCart = { vm.navigate(NavCmd.ToCart) }
+            onCart = { vm.navigate(NavCmd.ToCart) },
+            onDrawer = onToggleDrawer
         )
 
         is ScreenState.Menu -> DefaultToolbar(

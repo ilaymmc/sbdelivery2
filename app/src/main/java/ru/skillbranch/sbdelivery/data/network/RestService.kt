@@ -46,6 +46,7 @@ interface RestService {
     suspend fun sendReview(
         @Path("dish") dish:String,
         @Body review : ReviewReq,
-        token: String = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMGU5N2RmNGUzNDExMDAzY2M2ZTBlZCIsImlhdCI6MTYyODM0NjMzNSwiZXhwIjoxNjI4MzQ3NTM1fQ.JYVPAOxDOmmMJXULJD2MvMpXWdkMxnZ64KVrqP7SEns"
+        @Header("token") token: String = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" +
+             ".eyJpZCI6IjYxMGU5N2RmNGUzNDExMDAzY2M2ZTBlZCIsImlhdCI6MTYyODM0NjMzNSwiZXhwIjoxNjI4MzQ3NTM1fQ.JYVPAOxDOmmMJXULJD2MvMpXWdkMxnZ64KVrqP7SEns"
     ): ReviewRes
 }

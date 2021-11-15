@@ -46,7 +46,6 @@ class DishesRepository @Inject constructor(
             dishesDao.searchDishesByTitle(ids, query)
                 .map { dv -> dv.map { it.toDishItem() } }
         }
-
     }
 
     override suspend fun findDishesByCategory(category: String): Flow<List<DishItem>> {
@@ -59,7 +58,6 @@ class DishesRepository @Inject constructor(
         return if (query.isEmpty()) findFavoriteDishes()
         else dishesDao.searchFavoriteDishesByTitle(query)
             .map { dv -> dv.map { it.toDishItem() } }
-
     }
 
     override fun findFavoriteDishes(): Flow<List<DishItem>> = dishesDao.findFavoriteDishes()

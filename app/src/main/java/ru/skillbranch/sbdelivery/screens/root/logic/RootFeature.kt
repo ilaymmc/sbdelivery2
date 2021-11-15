@@ -88,6 +88,8 @@ class RootFeature(private val initState: RootState? = null) {
             msg is Msg.RemoveFromCart -> root to setOf(Eff.RemoveFromCart(msg.id, msg.title))
             msg is Msg.ClickDish -> root to setOf(Eff.Nav(NavCmd.ToDishItem(msg.id, msg.title)))
 
+            msg is Msg.ShowAbout -> root.copy(showAbout = msg.show) to emptySet()
+
             msg is Msg.Dishes && root.current is ScreenState.Dishes -> root.current.state.reduceCategory(
                 msg.msg,
                 root
@@ -125,7 +127,8 @@ data class RootState(
     val backstack: List<ScreenState> = emptyList(),
     val cartCount: Int = 0,
     val notificationsCount: Int = 0,
-    val user: User? = null
+    val user: User? = null,
+    val showAbout: Boolean = false
 ) : Serializable {
     val current: ScreenState =
         checkNotNull(screens[currentRoute], { "check route $currentRoute or scrrens $screens" })
@@ -252,6 +255,8 @@ sealed class Msg {
     data class AddToCart(val id: String, val title: String) : Msg()
     data class RemoveFromCart(val id: String, val title: String) : Msg()
     data class ClickDish(val id: String, val title: String) : Msg()
+
+    data class ShowAbout(val show: Boolean) : Msg()
 }
 
 sealed class NavCmd {

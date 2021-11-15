@@ -1,6 +1,7 @@
 package ru.skillbranch.sbdelivery.screens.home.logic
 
 import android.util.Log
+import androidx.compose.material.rememberDismissState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -27,6 +28,9 @@ class HomeEffHandler @Inject constructor(
         eff: HomeFeature.Eff,
         commit: (Msg) -> Unit
     ) {
+        coroutineScope {
+
+        }
         CoroutineScope(coroutineContext + localJob + errHandler).launch {
             when (eff) {
                 HomeFeature.Eff.FindBest -> {

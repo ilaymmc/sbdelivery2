@@ -76,16 +76,18 @@ fun RootState.reduceNavigate(
                         copy(state = FavoriteFeature.initialState())
                     }
                 }
+
+                CartFeature.route -> {
+                    newState.changeCurrentScreen<ScreenState.Cart> {
+                        copy(state = CartFeature.initialState())
+                    }
+                }
                 else -> throw IllegalStateException("not found navigation for route ${msg.route}")
             }
 
             newState to newState.current.initialEffects()
         }
-
-
     }.run { first to second.plus(navEff)}
-
-
 }
 
 fun <T : ScreenState> RootState.screenStateFactory(route: String, block: T.() -> T): RootState {
