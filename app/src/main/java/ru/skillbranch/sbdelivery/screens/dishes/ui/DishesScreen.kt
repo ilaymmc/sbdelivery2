@@ -15,7 +15,7 @@ import ru.skillbranch.sbdelivery.R
 import ru.skillbranch.sbdelivery.screens.components.LazyGrid
 import ru.skillbranch.sbdelivery.screens.dishes.data.DishesUiState
 import ru.skillbranch.sbdelivery.screens.dishes.logic.DishesState
-import ru.skillbranch.sbdelivery.screens.home.ui.ProductItem
+import ru.skillbranch.sbdelivery.screens.components.items.ProductItem
 import ru.skillbranch.sbdelivery.screens.root.logic.Msg
 
 @ExperimentalCoilApi

@@ -1,4 +1,4 @@
-package ru.skillbranch.sbdelivery.screens.home.ui
+package ru.skillbranch.sbdelivery.screens.components.items
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -111,7 +111,7 @@ fun ProductItem(
             }
             
             Text(
-                text = "${dish.price} руб.",
+                text = "${dish.price} руб",
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier.constrainAs(price) {

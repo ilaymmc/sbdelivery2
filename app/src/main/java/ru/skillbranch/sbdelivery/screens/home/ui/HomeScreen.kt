@@ -70,10 +70,10 @@ fun HomeScreen(state: HomeFeature.State, accept: (Msg) -> Unit) {
             is DishesUiState.Error -> {
                 /*TODO*/
             }
-            is DishesUiState.Loading -> ShimmerSection(itemWidth = 160.dp, title = "Лучшие")
+            is DishesUiState.Loading -> ShimmerSection(itemWidth = 160.dp, title = "Лучшее")
             is DishesUiState.Value -> SectionList(
                 dishes = state.best.dishes,
-                title = "Лучшие",
+                title = "Лучшее",
                 onClick = { accept(Msg.ClickDish(it.id, it.title)) },
                 onAddToCart = { accept(Msg.AddToCart(it.id, it.title)) },
                 onToggleLike = { accept(Msg.ToggleLike(it.id, !it.isFavorite)) },
@@ -86,10 +86,10 @@ fun HomeScreen(state: HomeFeature.State, accept: (Msg) -> Unit) {
             is DishesUiState.Error -> {
                 /*TODO*/
             }
-            is DishesUiState.Loading -> ShimmerSection(itemWidth = 160.dp, title = "Популярные")
+            is DishesUiState.Loading -> ShimmerSection(itemWidth = 160.dp, title = "Популярное")
             is DishesUiState.Value -> SectionList(
                 dishes = state.popular.dishes,
-                title = "Популярные",
+                title = "Популярное",
                 onClick = { accept(Msg.ClickDish(it.id, it.title)) },
                 onAddToCart = { accept(Msg.AddToCart(it.id, it.title)) },
                 onToggleLike = { accept(Msg.ToggleLike(it.id, !it.isFavorite)) },

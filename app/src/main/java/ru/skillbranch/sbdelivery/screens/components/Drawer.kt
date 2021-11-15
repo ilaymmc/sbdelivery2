@@ -55,7 +55,8 @@ fun NavigationDrawer(
     user: User? = User("Сидоров Иван", "sidorov.ivan@mail.ru"),
     notificationCount:Int = 0,
     cartCount:Int = 0,
-    onSelect: (String) -> Unit
+    onLogout: () -> Unit,
+    onSelect: (String) -> Unit,
 ) {
     Column(modifier = modifier.background(color = MaterialTheme.colors.surface)) {
 
@@ -81,7 +82,7 @@ fun NavigationDrawer(
                     Text(text = it.email, style = MaterialTheme.typography.body1)
                 }
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = onLogout,
                     modifier = Modifier.offset(x = (-12.dp), y = (-12.dp))
                 ) {
                     Icon(
@@ -158,7 +159,7 @@ fun NavigationDrawer(
             )
             Spacer(modifier = Modifier.width(30.dp))
             Text(
-                text = "О Приложении",
+                text = "О приложении",
                 style = MaterialTheme.typography.subtitle2
             )
         }
@@ -169,8 +170,8 @@ fun NavigationDrawer(
 @Composable
 fun DrawerPreview() {
     AppTheme {
-        NavigationDrawer("notifications",  notificationCount = 7, cartCount = 8) {
-        }
+        NavigationDrawer("notifications",  notificationCount = 7, cartCount = 8,
+            onSelect = {}, onLogout = {})
     }
 
 }

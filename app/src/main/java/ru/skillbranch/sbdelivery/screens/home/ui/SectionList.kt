@@ -1,9 +1,7 @@
 package ru.skillbranch.sbdelivery.screens.home.ui
 
-import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -20,7 +18,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -43,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ru.skillbranch.sbdelivery.screens.components.Grid
+import ru.skillbranch.sbdelivery.screens.components.items.ProductItem
 import ru.skillbranch.sbdelivery.screens.root.ui.AppTheme
 
 @Composable
@@ -65,7 +63,7 @@ fun SectionList(
             Text(text = title, style = MaterialTheme.typography.h6)
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = if (!expanded) "См.все" else "свернуть",
+                text = if (!expanded) "См. все" else "Свернуть",
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
