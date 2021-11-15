@@ -87,11 +87,11 @@ fun AboutDialog(onDismiss: () -> Unit) {
                     Button(
                         modifier = Modifier.padding(16.dp),
                         onClick = onDismiss,
-                        shape = MaterialTheme.shapes.medium
+                        shape = MaterialTheme.shapes.medium,
                     ) {
                         Text(
-                            text = "Ok",
-                            style = MaterialTheme.typography.button,
+                            text = "Ок",
+//                            style = MaterialTheme.typography.button,
                         )
                     }
                 }
